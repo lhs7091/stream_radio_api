@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stream_radio_api/export_path.dart';
 
-class NowPlayingWidget extends StatelessWidget {
+class NowPlayingWidget extends StatefulWidget {
   final String title;
   final String radioURL;
 
@@ -9,12 +10,17 @@ class NowPlayingWidget extends StatelessWidget {
       : super(key: key);
 
   @override
+  _NowPlayingWidgetState createState() => _NowPlayingWidgetState();
+}
+
+class _NowPlayingWidgetState extends State<NowPlayingWidget> {
+  @override
   Widget build(BuildContext context) {
     return new Padding(
       padding: EdgeInsets.fromLTRB(10.0, 10.0, 5.0, 10.0),
       child: ListTile(
         title: new Text(
-          title,
+          widget.title,
           style: new TextStyle(
             fontWeight: FontWeight.bold,
             color: HexColor("#ffffff"),
@@ -27,7 +33,7 @@ class NowPlayingWidget extends StatelessWidget {
             color: HexColor("#ffffff"),
           ),
         ),
-        leading: _image(radioURL, size: 50.0),
+        leading: _image(widget.radioURL, size: 50.0),
         trailing: Wrap(
           spacing: -10.0,
           children: [
@@ -64,10 +70,13 @@ class NowPlayingWidget extends StatelessWidget {
   }
 
   Widget _buildStopIcon(BuildContext context) {
+    var playerProvider =
+        Provider.of<PlayerProviderService>(context, listen: false);
+
     return IconButton(
         icon: Icon(Icons.stop),
         onPressed: () {
-          return null;
+          playerProvider.updatePlayerState(RadioPlayerState.STOPPED);
         });
   }
 

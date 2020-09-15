@@ -23,3 +23,4 @@ export './widget/radio_list_widget.dart';
 
 // service
 export './service/db_download_service.dart';
+export './service/player_provider_service.dart';

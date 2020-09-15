@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:stream_radio_api/export_path.dart';
 
@@ -23,7 +24,7 @@ class RadioRowWidget extends StatelessWidget {
         spacing: -10.0,
         runSpacing: 0.0,
         children: [
-          _buildPlayStopIcon(),
+          _buildPlayStopIcon(context),
           _buildAppFavoriteIcon(),
         ],
       ),
@@ -54,11 +55,14 @@ class RadioRowWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayStopIcon() {
+  Widget _buildPlayStopIcon(BuildContext context) {
+    var playerProvider =
+        Provider.of<PlayerProviderService>(context, listen: false);
+
     return IconButton(
         icon: Icon(Icons.play_circle_filled),
         onPressed: () {
-          return null;
+          playerProvider.updatePlayerState(RadioPlayerState.PLAYING);
         });
   }
 
