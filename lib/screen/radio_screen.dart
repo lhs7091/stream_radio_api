@@ -22,10 +22,10 @@ class _RadioScreenState extends State<RadioScreen> {
           AppLogoWidget(),
           SearchBar(),
           RadioListWidget(radioModel: radioModel),
-          NowPlayScreen(
-            radioTitle: "Current Radio Playing",
-            radioImageUrl: radioModel.radioPic,
-          )
+          // NowPlayScreen(
+          //   radioTitle: "Current Radio Playing",
+          //   radioImageUrl: radioModel.radioPic,
+          // )
         ],
       ),
     );

@@ -8,27 +8,35 @@ class RadioListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(0, 5.0, 0, 5.0),
-        child: ListView(
-          children: [
-            ListView.separated(
-              itemCount: 10,
-              physics: ScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return RadioRowScreen(
-                  radioModel: radioModel,
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+    return new FutureBuilder(
+        future: DBDownLoadService.fetchLocalDB(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<RadioModel>> snapshot) {
+          if (snapshot.hasData) {
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 5.0, 0, 5.0),
+                child: ListView(
+                  children: [
+                    ListView.separated(
+                      itemCount: snapshot.data.length,
+                      physics: ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return RadioRowScreen(
+                          radioModel: snapshot.data[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+          return CircularProgressIndicator();
+        });
   }
 }

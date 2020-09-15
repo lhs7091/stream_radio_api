@@ -3,9 +3,9 @@ import 'package:stream_radio_api/export_path.dart';
 
 class NowPlayingWidget extends StatelessWidget {
   final String title;
-  final String imageUrl;
+  final String radioURL;
 
-  const NowPlayingWidget({Key key, this.title, this.imageUrl})
+  const NowPlayingWidget({Key key, this.title, this.radioURL})
       : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class NowPlayingWidget extends StatelessWidget {
             color: HexColor("#ffffff"),
           ),
         ),
-        leading: _image(imageUrl, size: 50.0),
+        leading: _image(radioURL, size: 50.0),
         trailing: Wrap(
           spacing: -10.0,
           children: [

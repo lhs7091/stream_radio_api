@@ -18,7 +18,7 @@ class NowPlayScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               NowPlayingWidget(
-                  title: this.radioTitle, imageUrl: this.radioImageUrl),
+                  title: this.radioTitle, radioURL: this.radioImageUrl),
             ],
           ),
         ),

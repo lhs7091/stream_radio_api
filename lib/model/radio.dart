@@ -22,7 +22,7 @@ class RadioModel extends DBBaseModel {
 
   final int id;
   final String radioName;
-  final String radioUrl;
+  final String radioURL;
   final String radioDesc;
   final String radioWebsite;
   final String radioPic;
@@ -31,7 +31,7 @@ class RadioModel extends DBBaseModel {
   RadioModel({
     this.id,
     this.radioName,
-    this.radioUrl,
+    this.radioURL,
     this.radioDesc,
     this.radioWebsite,
     this.radioPic,
@@ -42,7 +42,7 @@ class RadioModel extends DBBaseModel {
     return RadioModel(
       id: json["ID"],
       radioName: json['RadioName'],
-      radioUrl: json['RadioURL'],
+      radioURL: json['RadioURL'],
       radioDesc: json['RadioDesc'],
       radioWebsite: json['RadioWebsite'],
       radioPic: json['RadioPic'],
@@ -54,7 +54,7 @@ class RadioModel extends DBBaseModel {
     return RadioModel(
       id: map["id"],
       radioName: map['radioName'],
-      radioUrl: map['radioURL'],
+      radioURL: map['radioURL'],
       radioDesc: map['radioDesc'],
       radioWebsite: map['radioWebsite'],
       radioPic: map['radioPic'],
@@ -65,7 +65,7 @@ class RadioModel extends DBBaseModel {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
       'radioName': radioName,
-      'radioURL': radioUrl,
+      'radioURL': radioURL,
       'radioDesc': radioDesc,
       'radioWebsite': radioWebsite,
       'radioPic': radioPic
