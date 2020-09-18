@@ -3,10 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:stream_radio_api/export_path.dart';
 
 class RadioListWidget extends StatelessWidget {
-  final RadioModel radioModel;
-
-  const RadioListWidget({Key key, this.radioModel}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Consumer<PlayerProviderService>(

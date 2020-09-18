@@ -13,7 +13,8 @@ class DBDownLoadService {
     return serviceResponse;
   }
 
-  static Future<List<RadioModel>> fetchLocalDB() async {
+  static Future<List<RadioModel>> fetchLocalDB(
+      {String searchQuery = ""}) async {
     if (!await isLocalDBAvailable()) {
       // HTTP call to fetch data
       RadioAPIModel radioAPIModel = await fetchAllRadios();
@@ -28,9 +29,17 @@ class DBDownLoadService {
       }
     }
 
-    List<Map<String, dynamic>> _results = await DB.query(RadioModel.table);
+    String rawQuery =
+        "select id, radioName, radioDesc, radioWebsite, radioPic from radios ";
+    if (searchQuery.trim() != "") {
+      rawQuery = rawQuery +
+          " WHERE radioName LIKE '%$searchQuery%' OR radioDesc LIKE '%$searchQuery%'";
+    }
+
+    List<Map<String, dynamic>> _results = await DB.rawQuery(rawQuery);
+
     List<RadioModel> radioModel = new List<RadioModel>();
-    radioModel = _results.map((e) => RadioModel.fromMap(e)).toList();
+    radioModel = _results.map((item) => RadioModel.fromMap(item)).toList();
 
     return radioModel;
   }
