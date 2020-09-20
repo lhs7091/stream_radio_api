@@ -18,6 +18,8 @@ class RadioRowScreen extends StatefulWidget {
 class _RadioRowScreenState extends State<RadioRowScreen> {
   @override
   Widget build(BuildContext context) {
+    print("_RadioRowScreenState ${this.widget.radioModel.radioURL}");
+    print("_RadioRowScreenState ${this.widget.radioModel.radioName}");
     return RadioRowWidget(
         radioModel: this.widget.radioModel,
         isFavoriteOnly: this.widget.isFavoriteOnly);

@@ -77,6 +77,7 @@ class _NowPlayingWidgetState extends State<NowPlayingWidget> {
         icon: Icon(Icons.stop),
         onPressed: () {
           playerProvider.updatePlayerState(RadioPlayerState.STOPPED);
+          playerProvider.stopRadio();
         });
   }
 

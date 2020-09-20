@@ -12,6 +12,11 @@ class RadioRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var playerProvider =
+        Provider.of<PlayerProviderService>(context, listen: false);
+    final bool _isSelectedRadio =
+        radioModel.id == playerProvider.currentRadio.id;
+
     return ListTile(
       title: new Text(
         radioModel.radioName,
@@ -26,7 +31,7 @@ class RadioRowWidget extends StatelessWidget {
         spacing: -10.0,
         runSpacing: 0.0,
         children: [
-          _buildPlayStopIcon(context),
+          _buildPlayStopIcon(context, _isSelectedRadio),
           _buildAppFavoriteIcon(context),
         ],
       ),
@@ -57,15 +62,45 @@ class RadioRowWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayStopIcon(BuildContext context) {
+  Widget _buildPlayStopIcon(BuildContext context, bool isSelectedSong) {
     var playerProvider =
         Provider.of<PlayerProviderService>(context, listen: false);
 
     return IconButton(
-        icon: Icon(Icons.play_circle_filled),
+        icon: _buildAudioButton(playerProvider, isSelectedSong),
         onPressed: () {
           playerProvider.updatePlayerState(RadioPlayerState.PLAYING);
+          if (!playerProvider.isStopped() && isSelectedSong) {
+            playerProvider.stopRadio();
+          } else {
+            if (!playerProvider.isLoading()) {
+              playerProvider.initAudioPlayer();
+              playerProvider.setAudioPlayer(radioModel);
+              playerProvider.playRadio();
+            }
+          }
         });
+  }
+
+  Widget _buildAudioButton(PlayerProviderService model, _isSelectedSong) {
+    if (_isSelectedSong) {
+      if (model.isLoading()) {
+        return Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 2.0,
+          ),
+        );
+      }
+      if (!model.isStopped()) {
+        return Icon(Icons.stop);
+      }
+      if (model.isStopped()) {
+        return Icon(Icons.play_circle_filled);
+      }
+    } else {
+      return Icon(Icons.play_circle_filled);
+    }
+    return Container();
   }
 
   Widget _buildAppFavoriteIcon(BuildContext context) {

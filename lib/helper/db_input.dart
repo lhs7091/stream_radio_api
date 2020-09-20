@@ -7,8 +7,15 @@ abstract class DB {
   static Database _db;
 
   static int get _version => 1;
+  //static bool dbInit = true;
 
   static Future<void> init() async {
+    // if (dbInit) {
+    //   var databasesPath = await getDatabasesPath();
+    //   String _path = p.join(databasesPath, 'RadioApp.db');
+    //   await deleteDatabase(_path);
+    //   dbInit = false;
+    // }
     if (_db != null) {
       return;
     }
@@ -24,9 +31,9 @@ abstract class DB {
 
   static void onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE radios (id INTEGER PRIMARY KEY NOT NULL, radioName STRING, radioUrl STRING, radioDesc STRING, radioWebsite STRING, radioPic String)');
+        'CREATE TABLE radios (id INTEGER PRIMARY KEY NOT NULL, radioName STRING, radioURL STRING, radioDesc STRING, radioWebsite STRING, radioPic String)');
     await db.execute(
-        'CREATE TABLE radios_bookmarks (id INTEGER PRIMARY KEY NOT NULL, isFavorite INTEGER)');
+        'CREATE TABLE radios_bookmarks (id INTEGER PRIMARY KEY NOT NULL, isFavourite INTEGER)');
   }
 
   static Future<List<Map<String, dynamic>>> query(String table) async =>

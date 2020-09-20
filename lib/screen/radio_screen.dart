@@ -19,12 +19,16 @@ class _RadioScreenState extends State<RadioScreen> {
 
   @override
   void initState() {
-    var playerProvider =
-        Provider.of<PlayerProviderService>(context, listen: false);
-    playerProvider.fetchAllRadios(isFavoriteOnly: this.widget.isFavoriteOnly);
-
     super.initState();
     print('initState()');
+
+    var playerProvider =
+        Provider.of<PlayerProviderService>(context, listen: false);
+
+    playerProvider.initAudioPlugin();
+    playerProvider.initStreams();
+
+    playerProvider.fetchAllRadios(isFavoriteOnly: this.widget.isFavoriteOnly);
 
     _searchQuery.addListener(() {
       var radioProvider =
@@ -95,8 +99,8 @@ class _RadioScreenState extends State<RadioScreen> {
     return Visibility(
         visible: playerProvider.getPlayerState() == RadioPlayerState.PLAYING,
         child: NowPlayScreen(
-          radioTitle: "Current Radio Playing",
-          radioImageUrl: "http://isharpeners.com/sc_logo.png",
+          radioTitle: playerProvider.currentRadio.radioName,
+          radioImageUrl: playerProvider.currentRadio.radioPic,
         ));
   }
 
