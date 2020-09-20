@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:stream_radio_api/export_path.dart';
 
 class RadioListWidget extends StatelessWidget {
+  final bool isFavoriteOnly;
+
+  const RadioListWidget({Key key, this.isFavoriteOnly}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<PlayerProviderService>(
@@ -19,8 +23,8 @@ class RadioListWidget extends StatelessWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return RadioRowScreen(
-                      radioModel: radioModel.allRadio[index],
-                    );
+                        radioModel: radioModel.allRadio[index],
+                        isFavoriteOnly: isFavoriteOnly);
                   },
                   separatorBuilder: (context, index) {
                     return Divider();

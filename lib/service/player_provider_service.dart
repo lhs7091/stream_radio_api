@@ -20,10 +20,19 @@ class PlayerProviderService with ChangeNotifier {
     _radiosFetcher = List<RadioModel>();
   }
 
-  fetchAllRadios({String searchQuery = ""}) async {
-    _radiosFetcher =
-        await DBDownLoadService.fetchLocalDB(searchQuery: searchQuery);
+  fetchAllRadios({String searchQuery = "", bool isFavoriteOnly = false}) async {
+    _radiosFetcher = await DBDownLoadService.fetchLocalDB(
+        searchQuery: searchQuery, isFavoriteOnly: isFavoriteOnly);
     notifyListeners();
+  }
+
+  Future<void> radioBookmarked(int radioId, bool isFavorite,
+      {bool isFavoriteOnly = false}) async {
+    var isFavoriteVal = isFavorite ? 0 : 1;
+    await DB.init();
+    await DB.rawInsert(
+        "insert or replace into radios_bookmarks (id, isFavourite) values ($radioId, $isFavoriteVal)");
+    fetchAllRadios(isFavoriteOnly: isFavoriteOnly);
   }
 
   void updatePlayerState(RadioPlayerState state) {

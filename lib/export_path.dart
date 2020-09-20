@@ -3,6 +3,7 @@ export './screen/home_screen.dart';
 export './screen/radio_row_screen.dart';
 export './screen/radio_screen.dart';
 export './screen/now_playing_screen.dart';
+export './screen/favorite_screen.dart';
 
 // helper
 export './helper/hexColor.dart';

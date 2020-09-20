@@ -3,10 +3,12 @@ import 'package:stream_radio_api/export_path.dart';
 
 class RadioRowScreen extends StatefulWidget {
   final RadioModel radioModel;
+  final bool isFavoriteOnly;
 
   RadioRowScreen({
     Key key,
     this.radioModel,
+    this.isFavoriteOnly,
   }) : super(key: key);
 
   @override
@@ -16,6 +18,8 @@ class RadioRowScreen extends StatefulWidget {
 class _RadioRowScreenState extends State<RadioRowScreen> {
   @override
   Widget build(BuildContext context) {
-    return RadioRowWidget(radioModel: this.widget.radioModel);
+    return RadioRowWidget(
+        radioModel: this.widget.radioModel,
+        isFavoriteOnly: this.widget.isFavoriteOnly);
   }
 }

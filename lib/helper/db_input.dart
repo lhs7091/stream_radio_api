@@ -26,7 +26,7 @@ abstract class DB {
     await db.execute(
         'CREATE TABLE radios (id INTEGER PRIMARY KEY NOT NULL, radioName STRING, radioUrl STRING, radioDesc STRING, radioWebsite STRING, radioPic String)');
     await db.execute(
-        'CREATE TABLE radios_bookmarks (id INTEGER PRIMARY KEY NOT NULL, isFavourite INTEGER)');
+        'CREATE TABLE radios_bookmarks (id INTEGER PRIMARY KEY NOT NULL, isFavorite INTEGER)');
   }
 
   static Future<List<Map<String, dynamic>>> query(String table) async =>

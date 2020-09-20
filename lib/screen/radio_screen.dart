@@ -5,6 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:stream_radio_api/export_path.dart';
 
 class RadioScreen extends StatefulWidget {
+  final bool isFavoriteOnly;
+
+  const RadioScreen({Key key, this.isFavoriteOnly}) : super(key: key);
+
   @override
   _RadioScreenState createState() => _RadioScreenState();
 }
@@ -17,7 +21,7 @@ class _RadioScreenState extends State<RadioScreen> {
   void initState() {
     var playerProvider =
         Provider.of<PlayerProviderService>(context, listen: false);
-    playerProvider.fetchAllRadios();
+    playerProvider.fetchAllRadios(isFavoriteOnly: this.widget.isFavoriteOnly);
 
     super.initState();
     print('initState()');
@@ -27,7 +31,9 @@ class _RadioScreenState extends State<RadioScreen> {
           Provider.of<PlayerProviderService>(context, listen: false);
       if (_debounce?.isActive ?? false) _debounce.cancel();
       _debounce = Timer(const Duration(milliseconds: 500), () {
-        radioProvider.fetchAllRadios(searchQuery: _searchQuery.text);
+        radioProvider.fetchAllRadios(
+            searchQuery: _searchQuery.text,
+            isFavoriteOnly: this.widget.isFavoriteOnly);
       });
     });
   }
@@ -39,11 +45,47 @@ class _RadioScreenState extends State<RadioScreen> {
         children: [
           AppLogoWidget(),
           _searchBar(),
-          RadioListWidget(),
+          _radioListWidget(),
           _nowPlaying(),
         ],
       ),
     );
+  }
+
+  Widget _radioListWidget() {
+    return Consumer<PlayerProviderService>(
+        builder: (BuildContext context, radioModel, child) {
+      if (radioModel.totalRecords > 0) {
+        return Expanded(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, 5.0, 0, 5.0),
+            child: ListView(
+              children: [
+                ListView.separated(
+                  itemCount: radioModel.totalRecords,
+                  physics: ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return RadioRowScreen(
+                        radioModel: radioModel.allRadio[index],
+                        isFavoriteOnly: this.widget.isFavoriteOnly);
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      if (radioModel.totalRecords == 0) {
+        return new Expanded(
+          child: _noData(),
+        );
+      }
+      return CircularProgressIndicator();
+    });
   }
 
   Widget _nowPlaying() {
@@ -56,6 +98,30 @@ class _RadioScreenState extends State<RadioScreen> {
           radioTitle: "Current Radio Playing",
           radioImageUrl: "http://isharpeners.com/sc_logo.png",
         ));
+  }
+
+  Widget _noData() {
+    String noDataText = "";
+    bool showTextMessage = false;
+
+    if (this.widget.isFavoriteOnly ||
+        (this.widget.isFavoriteOnly && _searchQuery.text.isNotEmpty)) {
+      noDataText = "No Favorites";
+      showTextMessage = true;
+    } else if (_searchQuery.text.isNotEmpty) {
+      noDataText = "No Radio Found";
+      showTextMessage = true;
+    }
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+              child: showTextMessage
+                  ? new Text(noDataText)
+                  : CircularProgressIndicator()),
+        ),
+      ],
+    );
   }
 
   Widget _searchBar() {

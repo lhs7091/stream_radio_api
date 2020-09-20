@@ -14,7 +14,7 @@ class DBDownLoadService {
   }
 
   static Future<List<RadioModel>> fetchLocalDB(
-      {String searchQuery = ""}) async {
+      {String searchQuery = "", bool isFavoriteOnly = false}) async {
     if (!await isLocalDBAvailable()) {
       // HTTP call to fetch data
       RadioAPIModel radioAPIModel = await fetchAllRadios();
@@ -28,12 +28,25 @@ class DBDownLoadService {
         });
       }
     }
+    String rawQuery = "";
 
-    String rawQuery =
-        "select id, radioName, radioDesc, radioWebsite, radioPic from radios ";
-    if (searchQuery.trim() != "") {
-      rawQuery = rawQuery +
-          " WHERE radioName LIKE '%$searchQuery%' OR radioDesc LIKE '%$searchQuery%'";
+    if (!isFavoriteOnly) {
+      rawQuery =
+          "select radios.id, radioName, radioURL, radioDesc, radioWebsite, radioPic, isFavourite "
+          "from radios left join radios_bookmarks on radios_bookmarks.id = radios.id ";
+      if (searchQuery.trim() != "") {
+        rawQuery = rawQuery +
+            " WHERE radioName LIKE '%$searchQuery%' OR radioDesc LIKE '%$searchQuery%'";
+      }
+    } else {
+      rawQuery =
+          "select radios.id, radioName, radioURL, radioDesc, radioWebsite, radioPic, isFavourite "
+          "from radios left join radios_bookmarks on radios_bookmarks.id = radios.id "
+          "where isFavourite = 1 ";
+      if (searchQuery.trim() != "") {
+        rawQuery = rawQuery +
+            " and radioName LIKE '%$searchQuery%' OR radioDesc LIKE '%$searchQuery%'";
+      }
     }
 
     List<Map<String, dynamic>> _results = await DB.rawQuery(rawQuery);

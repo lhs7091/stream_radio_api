@@ -5,8 +5,10 @@ import 'package:stream_radio_api/export_path.dart';
 
 class RadioRowWidget extends StatelessWidget {
   final RadioModel radioModel;
+  final bool isFavoriteOnly;
 
-  const RadioRowWidget({Key key, this.radioModel}) : super(key: key);
+  const RadioRowWidget({Key key, this.radioModel, this.isFavoriteOnly})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class RadioRowWidget extends StatelessWidget {
         runSpacing: 0.0,
         children: [
           _buildPlayStopIcon(context),
-          _buildAppFavoriteIcon(),
+          _buildAppFavoriteIcon(context),
         ],
       ),
     );
@@ -66,12 +68,18 @@ class RadioRowWidget extends StatelessWidget {
         });
   }
 
-  Widget _buildAppFavoriteIcon() {
+  Widget _buildAppFavoriteIcon(BuildContext context) {
+    var playerProvider =
+        Provider.of<PlayerProviderService>(context, listen: false);
+
     return IconButton(
-        icon: Icon(Icons.favorite_border),
+        icon: radioModel.isBookmarked
+            ? Icon(Icons.favorite)
+            : Icon(Icons.favorite_border),
         color: HexColor("#9097A6"),
         onPressed: () {
-          return null;
+          playerProvider.radioBookmarked(radioModel.id, radioModel.isBookmarked,
+              isFavoriteOnly: isFavoriteOnly);
         });
   }
 }
